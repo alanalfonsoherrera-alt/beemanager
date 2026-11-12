@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almic - Productos Apícolas Artesanales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-fondo: #fcfbf7;
+            --color-principal: #d97706; /* Ámbar / Miel */
+            --color-secundario: #b45309;
+            --color-oscuro: #78350f;
+            --color-texto: #1f2937;
+            --color-texto-secundario: #4b5563;
+            --color-tarjeta-bg: #ffffff;
+            --color-placeholder: #fef3c7;
+            --sombra-tarjeta: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* Navegación */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--color-principal);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-texto);
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.activo {
+            color: var(--color-principal);
+            font-weight: 600;
+        }
+
+        .btn-nuevo {
+            background-color: var(--color-principal);
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-nuevo:hover {
+            background-color: var(--color-secundario);
+        }
+
+        .btn-carrito-nav {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-texto);
+        }
+
+        .badge-carrito {
+            background-color: var(--color-principal);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 0.8rem;
+        }
+
+        /* Secciones */
+        .seccion-vista {
+            display: none;
+        }
+
+        .seccion-vista.activa {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            padding: 90px 20px;
+            text-align: center;
+            border-bottom: 1px solid #fde68a;
+        }
+
+        .hero-contenido {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.2rem;
+            color: #451a03; /* Tono café cálido, menos pesado */
+            margin-bottom: 20px;
+            line-height: 1.25;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Resalte especial para palabras clave */
+        .texto-destacado {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--color-texto-secundario);
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .hero-botones {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-hero-primary {
+            background-color: var(--color-principal);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-hero-primary:hover {
+            background-color: var(--color-secundario);
+            transform: translateY(-2px);
+        }
+
+        .btn-hero-secondary {
+            background-color: transparent;
+            color: var(--color-oscuro);
+            border: 2px solid var(--color-principal);
+            padding: 12px 26px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-hero-secondary:hover {
+            background-color: #fef3c7;
+        }
+
+        /* Nosotros Section */
+        .nosotros-container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .nosotros-container h2 {
+            font-size: 2.2rem;
+            color: var(--color-oscuro);
+            margin-bottom: 20px;
+        }
+
+        .nosotros-container p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-texto-secundario);
+            margin-bottom: 40px;
+        }
+
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .tarjeta-valor {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #f3f4f6;
+            box-shadow: var(--sombra-tarjeta);
+        }
+
+        .tarjeta-valor h4 {
+            color: var(--color-principal);
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        /* Catálogo Grid */
+        main {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        h2.titulo-seccion {
+            font-size: 2rem;
+            color: var(--color-texto);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .contenedor-catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .tarjeta-producto {
+            background-color: var(--color-tarjeta-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--sombra-tarjeta);
+            border: 1px solid #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+
+        .tarjeta-producto:hover {
+            transform: translateY(-4px);
+        }
+
+        .foto-placeholder {
+            background-color: var(--color-placeholder);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-secundario);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 0 15px;
+        }
+
+        .info-producto {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .info-producto h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.25rem;
+            color: var(--color-texto);
+        }
+
+        .info-producto p {
+            margin: 0 0 20px 0;
+            font-size: 0.95rem;
+            color: var(--color-texto-secundario);
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .precio-stock {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .precio {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--color-principal);
+        }
+
+        .stock {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .btn-agregar {
+            background-color: var(--color-principal);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn-agregar:hover {
+            background-color: var(--color-secundario);
+        }
+
+        /* Modales */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-contenido {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .cerrar-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .campo-form {
+            margin-bottom: 15px;
+        }
+
+        .campo-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .campo-form input, .campo-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .btn-guardar {
+            background-color: var(--color-principal);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .item-carrito {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .item-detalles h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+        }
+
+        .item-detalles span {
+            color: var(--color-principal);
+            font-weight: bold;
+        }
+
+        .item-controles {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-cantidad {
+            background-color: #f3f4f6;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .total-carrito {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú de Navegación -->
+    <nav>
+        <a onclick="mostrarSeccion('inicio')" class="logo" style="cursor: pointer;">Almic</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a onclick="mostrarSeccion('inicio')" id="link-inicio" class="activo">Inicio</a>
+                <a onclick="mostrarSeccion('catalogo-seccion')" id="link-catalogo">Catálogo</a>
+                <a onclick="mostrarSeccion('nosotros-seccion')" id="link-nosotros">Nosotros</a>
+                <a onclick="mostrarSeccion('contacto-seccion')" id="link-contacto">Contacto</a>
+            </div>
+            <button class="btn-nuevo" onclick="abrirModal('modalProducto')">+ Agregar Producto</button>
+            <button class="btn-carrito-nav" onclick="abrirModal('modalCarrito')">
+                🛒 Carrito <span id="badgeCarrito" class="badge-carrito">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- VISTA INICIO (Hero + Preview de Catálogo) -->
+    <div id="inicio" class="seccion-vista activa">
+        <section class="hero">
+            <div class="hero-contenido">
+                <h1>El <span class="texto-destacado">oro líquido</span> de nuestras colmenas directo a tu hogar</h1>
+                <p>En <strong>Almic</strong> cosechamos miel pura y derivados apícolas de forma 100% artesanal, respetando el bienestar de las abejas y garantizando la máxima pureza natural.</p>
+                <div class="hero-botones">
+                    <a onclick="mostrarSeccion('catalogo-seccion')" class="btn-hero-primary" style="cursor: pointer;">Explorar Catálogo</a>
+                    <a onclick="mostrarSeccion('nosotros-seccion')" class="btn-hero-secondary" style="cursor: pointer;">Nuestra Historia</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VISTA CATÁLOGO -->
+    <div id="catalogo-seccion" class="seccion-vista activa">
+        <main>
+            <h2 class="titulo-seccion">Nuestros Productos</h2>
+            <div id="catalogo" class="contenedor-catalogo">
+                <div style="text-align: center; grid-column: 1 / -1; color: #6b7280; font-style: italic;">Cargando productos del inventario...</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- VISTA NOSOTROS -->
+    <div id="nosotros-seccion" class="seccion-vista">
+        <div class="nosotros-container">
+            <h2>Pasión Apícola y Cuidado Artesanal</h2>
+            <p>Almic nace del amor por la apicultura tradicional y el respeto por el medio ambiente. Cada frasco representa la recolección ética de miel multiflora, propóleo y polen fresco directamente de nuestras colmenas locales.</p>
+            
+            <div class="valores-grid">
+                <div class="tarjeta-valor">
+                    <div style="font-size: 2rem;">🐝</div>
+                    <h4>100% Puro y Natural</h4>
+                    <p style="font-size: 0.95rem;">Sin aditivos ni azúcares añadidos. Conservamos todas las enzimas y nutrientes naturales.</p>
+                </div>
+                <div class="tarjeta-valor">
+                    <div style="font-size: 2rem;">🌱</div>
+                    <h4>Sostenible</h4>
+                    <p style="font-size: 0.95rem;">Prácticas apícolas respetuosas que cuidan la biodiversidad y la salud de la colmena.</p>
+                </div>
+                <div class="tarjeta-valor">
+                    <div style="font-size: 2rem;">🍯</div>
+                    <h4>Cosecha Artesanal</h4>
+                    <p style="font-size: 0.95rem;">Procesos manuales dedicados para mantener intacta la calidad del producto final.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISTA CONTACTO -->
+    <div id="contacto-seccion" class="seccion-vista">
+        <div class="nosotros-container" style="max-width: 600px;">
+            <h2>Ponte en Contacto</h2>
+            <p>¿Tienes dudas sobre nuestros productos apícolas o te interesa realizar un pedido al por mayor? Escríbenos y te responderemos a la brevedad.</p>
+            
+            <form onsubmit="event.preventDefault(); alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.'); this.reset();" style="text-align: left; background: white; padding: 30px; border-radius: 12px; border: 1px solid #f3f4f6; box-shadow: var(--sombra-tarjeta);">
+                <div class="campo-form">
+                    <label for="contacto-nombre">Nombre completo</label>
+                    <input type="text" id="contacto-nombre" placeholder="ej. María García" required>
+                </div>
+                <div class="campo-form">
+                    <label for="contacto-email">Correo electrónico</label>
+                    <input type="email" id="contacto-email" placeholder="maria@ejemplo.com" required>
+                </div>
+                <div class="campo-form">
+                    <label for="contacto-mensaje">Mensaje o Pedido Especial</label>
+                    <textarea id="contacto-mensaje" rows="4" placeholder="Escribe aquí tus preguntas sobre la cosecha o volúmenes de venta..." required></textarea>
+                </div>
+                <button type="submit" class="btn-guardar">Enviar Mensaje</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Formulario -->
+    <div id="modalProducto" class="modal-overlay">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3>Nuevo Producto Apícola</h3>
+                <button class="cerrar-modal" onclick="cerrarModal('modalProducto')">&times;</button>
+            </div>
+            <form id="formNuevoProducto" onsubmit="guardarProducto(event)">
+                <div class="campo-form">
+                    <label for="nombre">Nombre del Producto</label>
+                    <input type="text" id="nombre" placeholder="ej. Propóleo Concentrado" required>
+                </div>
+                <div class="campo-form">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" rows="3" placeholder="ej. Extracto 100% puro..." required></textarea>
+                </div>
+                <div class="campo-form">
+                    <label for="precio">Precio (MXN)</label>
+                    <input type="number" id="precio" step="0.01" min="0" placeholder="150.00" required>
+                </div>
+                <div class="campo-form">
+                    <label for="stock">Stock inicial</label>
+                    <input type="number" id="stock" min="0" placeholder="10" required>
+                </div>
+                <button type="submit" class="btn-guardar">Guardar en Base de Datos</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Carrito -->
+    <div id="modalCarrito" class="modal-overlay">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3>Tu Carrito de Compras</h3>
+                <button class="cerrar-modal" onclick="cerrarModal('modalCarrito')">&times;</button>
+            </div>
+            <div id="listaCarrito"></div>
+            <div class="total-carrito">
+                <span>Total:</span>
+                <span id="montoTotal">$0.00 MXN</span>
+            </div>
+            <button class="btn-guardar" style="margin-top: 20px;" onclick="alert('¡Gracias por apoyar a Almic!')">Finalizar Pedido</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/productos';
+        let carrito = [];
+
+       // Navegación por Vistas (SPA)
+        function mostrarSeccion(seccionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.seccion-vista').forEach(seccion => {
+                seccion.classList.remove('activa');
+            });
+
+            // Mostrar según la sección seleccionada
+            if (seccionId === 'inicio') {
+                document.getElementById('inicio').classList.add('activa');
+                document.getElementById('catalogo-seccion').classList.add('activa');
+            } else if (seccionId === 'catalogo-seccion') {
+                document.getElementById('catalogo-seccion').classList.add('activa');
+            } else if (seccionId === 'nosotros-seccion') {
+                document.getElementById('nosotros-seccion').classList.add('activa');
+            } else if (seccionId === 'contacto-seccion') {
+                document.getElementById('contacto-seccion').classList.add('activa');
+            }
+
+            // Actualizar el estado visual activo en el menú
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('activo'));
+            if (seccionId === 'inicio') document.getElementById('link-inicio').classList.add('activo');
+            if (seccionId === 'catalogo-seccion') document.getElementById('link-catalogo').classList.add('activo');
+            if (seccionId === 'nosotros-seccion') document.getElementById('link-nosotros').classList.add('activo');
+            if (seccionId === 'contacto-seccion') document.getElementById('link-contacto').classList.add('activo');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cargar Catálogo desde FastAPI
+        async function cargarCatalogo() {
+            const contenedor = document.getElementById('catalogo');
+            try {
+                const respuesta = await fetch(API_URL);
+                const productos = await respuesta.json();
+
+                if (productos.length === 0) {
+                    contenedor.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; color: #6b7280;">No hay productos en el inventario.</div>';
+                    return;
+                }
+
+                contenedor.innerHTML = '';
+                productos.forEach(producto => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta-producto';
+                    tarjeta.innerHTML = `
+                        <div class="foto-placeholder">Foto ${producto.nombre}</div>
+                        <div class="info-producto">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <h3>${producto.nombre}</h3>
+                                <button onclick="eliminarProducto(${producto.id})" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 1.1rem;" title="Eliminar producto">🗑️</button>
+                            </div>
+                            <p>${producto.descripcion}</p>
+                            <div class="precio-stock">
+                                <span class="precio">$${Number(producto.precio).toFixed(2)} MXN</span>
+                                <span class="stock">Disp: ${producto.stock}</span>
+                            </div>
+                            <button class="btn-agregar" onclick="agregarAlCarrito(${producto.id}, '${producto.nombre}', ${producto.precio})">Agregar al carrito</button>
+                        </div>
+                    `;
+                    contenedor.appendChild(tarjeta);
+                });
+            } catch (error) {
+                console.error(error);
+                contenedor.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; color: #dc2626;">Error al conectar con el servidor backend.</div>';
+            }
+        }
+
+        // Carrito de compras
+        function agregarAlCarrito(id, nombre, precio) {
+            const existe = carrito.find(item => item.id === id);
+            if (existe) {
+                existe.cantidad++;
+            } else {
+                carrito.push({ id, nombre, precio, cantidad: 1 });
+            }
+            actualizarCarritoUI();
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const item = carrito.find(item => item.id === id);
+            if (item) {
+                item.cantidad += cambio;
+                if (item.cantidad <= 0) {
+                    carrito = carrito.filter(i => i.id !== id);
+                }
+            }
+            actualizarCarritoUI();
+        }
+
+        function actualizarCarritoUI() {
+            const lista = document.getElementById('listaCarrito');
+            const badge = document.getElementById('badgeCarrito');
+            const totalElem = document.getElementById('montoTotal');
+
+            const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            badge.innerText = totalItems;
+
+            if (carrito.length === 0) {
+                lista.innerHTML = '<p style="text-align: center; color: #6b7280;">El carrito está vacío.</p>';
+                totalElem.innerText = '$0.00 MXN';
+                return;
+            }
+
+            lista.innerHTML = '';
+            let sumaTotal = 0;
+
+            carrito.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                sumaTotal += subtotal;
+
+                const div = document.createElement('div');
+                div.className = 'item-carrito';
+                div.innerHTML = `
+                    <div class="item-detalles">
+                        <h4>${item.nombre}</h4>
+                        <span>$${subtotal.toFixed(2)} MXN</span>
+                    </div>
+                    <div class="item-controles">
+                        <button class="btn-cantidad" onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                        <span>${item.cantidad}</span>
+                        <button class="btn-cantidad" onclick="cambiarCantidad(${item.id}, 1)">+</button>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+
+            totalElem.innerText = `$${sumaTotal.toFixed(2)} MXN`;
+        }
+
+        // Peticiones backend
+        async function guardarProducto(event) {
+            event.preventDefault();
+            const nuevoProducto = {
+                nombre: document.getElementById('nombre').value,
+                descripcion: document.getElementById('descripcion').value,
+                precio: parseFloat(document.getElementById('precio').value),
+                stock: parseInt(document.getElementById('stock').value)
+            };
+
+            try {
+                const respuesta = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevoProducto)
+                });
+
+                if (respuesta.ok) {
+                    alert('¡Producto guardado exitosamente!');
+                    cerrarModal('modalProducto');
+                    document.getElementById('formNuevoProducto').reset();
+                    cargarCatalogo();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function eliminarProducto(id) {
+            if (!confirm('¿Deseas eliminar este producto del inventario?')) return;
+            try {
+                const respuesta = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                if (respuesta.ok) {
+                    alert('Producto eliminado.');
+                    cargarCatalogo();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Control de Modales
+        function abrirModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Inicializar
+        cargarCatalogo();
+        actualizarCarritoUI();
+    </script>
+</body>
+</html>
